@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retal Asset Manager | نظام إدارة الأصول</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* ألوان هوية رتال المستوحاة من بحث الويب */
+            --retal-dark: #2C2F33;      /* رمادي داكن للسايدبار */
+            --retal-primary: #54595F;   /* اللون الرسمي للنصوص */
+            --retal-accent: #B6E3D4;    /* لون "إيوان" المميز (أخضر نعناعي) */
+            --retal-gold: #C5A47E;      /* لون ذهبي خفيف للفخامة */
+            --bg-light: #F8F9FA;
+            --white: #FFFFFF;
+            --shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--retal-primary);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Sidebar التصميم الجانبي --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--white);
+            border-left: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            right: 0;
+            top: 0;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.02);
+        }
+
+        .logo-area {
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-box {
+            width: 40px;
+            height: 40px;
+            background: var(--retal-dark);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--retal-accent);
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .brand-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--retal-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #777;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: #F0F7F5; /* خلفية نعناعية خفيفة جداً */
+            color: var(--retal-dark);
+        }
+
+        .nav-link.active i {
+            color: #4AA6C5; /* لون أزرق بحري خفيف من ألوان مشاريعهم */
+        }
+
+        /* --- Main Content المحتوى الرئيسي --- */
+        .main-content {
+            margin-right: 260px; /* مسافة السايدبار */
+            width: calc(100% - 260px);
+            padding: 30px 40px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .page-title h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--retal-dark);
+        }
+
+        .page-title p {
+            color: #888;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--white);
+            padding: 8px 15px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            background: var(--retal-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--retal-dark);
+            font-weight: bold;
+        }
+
+        /* منطقة المحتوى الديناميكي التي سيكملها الذكاء الاصطناعي */
+        .dashboard-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        /* KPI Cards */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .kpi-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--retal-accent);
+        }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .kpi-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--retal-accent) 0%, #A8D8C7 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--retal-dark);
+            font-size: 20px;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--retal-dark);
+            margin-bottom: 5px;
+        }
+
+        .kpi-label {
+            color: #888;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .kpi-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #E8F5F1;
+            color: #2D8C68;
+        }
+
+        .kpi-trend.negative {
+            background: #FFE8E8;
+            color: #C84C4C;
+        }
+
+        /* Charts Row */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .chart-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--retal-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-title i {
+            color: var(--retal-accent);
+        }
+
+        canvas {
+            max-height: 250px;
+        }
+
+        /* Activity Table */
+        .activity-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .activity-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--retal-dark);
+        }
+
+        .view-all-btn {
+            background: transparent;
+            border: 1px solid var(--retal-accent);
+            color: var(--retal-dark);
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .view-all-btn:hover {
+            background: var(--retal-accent);
+            color: var(--retal-dark);
+        }
+
+        .activity-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .activity-table thead th {
+            text-align: right;
+            padding: 12px 15px;
+            color: #888;
+            font-weight: 600;
+            font-size: 13px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .activity-table tbody tr {
+            background: #F8FAFB;
+            transition: all 0.3s ease;
+        }
+
+        .activity-table tbody tr:hover {
+            background: #F0F7F5;
+            transform: scale(1.01);
+        }
+
+        .activity-table tbody td {
+            padding: 15px;
+            text-align: right;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .activity-table tbody td:first-child {
+            border-right: 1px solid #eee;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .activity-table tbody td:last-child {
+            border-left: 1px solid #eee;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.completed {
+            background: #E8F5F1;
+            color: #2D8C68;
+        }
+
+        .badge.pending {
+            background: #FFF4E6;
+            color: #E67E22;
+        }
+
+        .badge.urgent {
+            background: #FFE8E8;
+            color: #C84C4C;
+        }
+
+        .project-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--retal-dark);
+            font-weight: 500;
+        }
+
+        .project-icon {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--retal-accent);
+        }
+
+        @media (max-width: 1200px) {
+            .kpi-row, .charts-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 35px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--retal-dark);
+        }
+
+        .close-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #e0e0e0;
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--retal-dark);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--retal-accent);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--retal-accent) 0%, #A8D8C7 100%);
+            color: var(--retal-dark);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 15px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(182, 227, 212, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            border: 2px solid var(--retal-accent);
+            color: var(--retal-dark);
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--retal-accent);
+        }
+
+        /* Maintenance Table Styles */
+        .maintenance-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .maintenance-table thead th {
+            text-align: right;
+            padding: 12px 15px;
+            color: #888;
+            font-weight: 600;
+            font-size: 13px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .maintenance-table tbody tr {
+            background: #F8FAFB;
+            transition: all 0.3s ease;
+        }
+
+        .maintenance-table tbody tr:hover {
+            background: #F0F7F5;
+            transform: scale(1.01);
+        }
+
+        .maintenance-table tbody td {
+            padding: 15px;
+            text-align: right;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .maintenance-table tbody td:first-child {
+            border-right: 1px solid #eee;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .maintenance-table tbody td:last-child {
+            border-left: 1px solid #eee;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .priority-high {
+            color: #C84C4C;
+            font-weight: 600;
+        }
+
+        .priority-medium {
+            color: #E67E22;
+            font-weight: 600;
+        }
+
+        .priority-low {
+            color: #2D8C68;
+            font-weight: 600;
+        }
+
+        .action-btn {
+            background: var(--retal-accent);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--retal-dark);
+            transition: all 0.3s ease;
+            font-size: 13px;
+        }
+
+        .action-btn:hover {
+            background: #A8D8C7;
+            transform: translateY(-2px);
+        }
+
+        /* Reports Styles */
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .report-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .financial-table {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .financial-table th,
+        .financial-table td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .financial-table th {
+            color: #888;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .financial-table td {
+            color: var(--retal-dark);
+            font-weight: 500;
+        }
+
+        .amount-positive {
+            color: #2D8C68;
+            font-weight: 700;
+        }
+
+        .amount-negative {
+            color: #C84C4C;
+            font-weight: 700;
+        }
+
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-area">
+            <div class="logo-box">R</div>
+            <div class="brand-name">RETAL | رتال</div>
+        </div>
+
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" data-page="dashboard">
+                    <i class="fas fa-th-large"></i>
+                    <span>لوحة القيادة</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="projects">
+                    <i class="fas fa-building"></i>
+                    <span>مشاريعنا (إيوان)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="maintenance">
+                    <i class="fas fa-tools"></i>
+                    <span>الصيانة والتشغيل</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="reports">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>التقارير المالية</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="community">
+                    <i class="fas fa-users"></i>
+                    <span>تجربة المجتمع</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="nav-item" style="margin-top: auto;">
+            <a href="#" class="nav-link" style="color: #d9534f;">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>تسجيل خروج</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="header">
+            <div class="page-title">
+                <h1>نظرة عامة على الأصول</h1>
+                <p>مرحباً بك في نظام إدارة مجتمعات رتال الذكي</p>
+            </div>
+            
+            <div class="user-profile">
+                <span>المدير التنفيذي</span>
+                <div class="avatar">MA</div>
+            </div>
+        </header>
+
+        <div id="content-container">
+        
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="page-section active">
+            
+            <!-- KPI Cards Row -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">4.2 مليار ريال</div>
+                    <div class="kpi-label">إجمالي قيمة الأصول</div>
+                    <div class="kpi-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+12.5% من العام الماضي</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">94%</div>
+                    <div class="kpi-label">معدل الإشغال - إيوان سدرة</div>
+                    <div class="kpi-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+3.2% هذا الشهر</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">18</div>
+                    <div class="kpi-label">طلبات صيانة نشطة</div>
+                    <div class="kpi-trend negative">
+                        <i class="fas fa-clock"></i>
+                        <span>متوسط الاستجابة: 4.2 ساعة</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <i class="fas fa-chart-bar"></i>
+                        معدل التحصيل حسب الفرع
+                    </div>
+                    <canvas id="collectionChart"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <i class="fas fa-chart-line"></i>
+                        تطور رضا المجتمع
+                    </div>
+                    <canvas id="satisfactionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Activity Table -->
+            <div class="activity-card">
+                <div class="activity-header">
+                    <div class="activity-title">
+                        <i class="fas fa-history"></i> الأنشطة الأخيرة
+                    </div>
+                    <button class="view-all-btn">عرض الكل</button>
+                </div>
+
+                <table class="activity-table">
+                    <thead>
+                        <tr>
+                            <th>النشاط</th>
+                            <th>المشروع</th>
+                            <th>التاريخ</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>تجديد تلقائي لعقد الصيانة - فيلا 104</td>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon"></span>
+                                    إيوان سدرة
+                                </span>
+                            </td>
+                            <td>اليوم، 02:30 م</td>
+                            <td><span class="badge completed">مكتمل</span></td>
+                        </tr>
+                        <tr>
+                            <td>إرسال تنبيه السداد الشهري - 240 وحدة</td>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon" style="background: #4AA6C5;"></span>
+                                    رتال رايز
+                                </span>
+                            </td>
+                            <td>أمس، 09:15 ص</td>
+                            <td><span class="badge completed">مكتمل</span></td>
+                        </tr>
+                        <tr>
+                            <td>طلب صيانة طارئة - تسرب مياه</td>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon" style="background: #C5A47E;"></span>
+                                    نساج تاون
+                                </span>
+                            </td>
+                            <td>أمس، 11:45 م</td>
+                            <td><span class="badge urgent">عاجل</span></td>
+                        </tr>
+                        <tr>
+                            <td>تحديث بيانات المستأجرين - 45 عقد</td>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon"></span>
+                                    إيوان سدرة
+                                </span>
+                            </td>
+                            <td>منذ يومين</td>
+                            <td><span class="badge pending">قيد المعالجة</span></td>
+                        </tr>
+                        <tr>
+                            <td>تفعيل نظام الدفع الإلكتروني</td>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon" style="background: #4AA6C5;"></span>
+                                    رتال رايز
+                                </span>
+                            </td>
+                            <td>منذ 3 أيام</td>
+                            <td><span class="badge completed">مكتمل</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <!-- End Dashboard Section -->
+
+        <!-- Maintenance Section -->
+        <div id="maintenance" class="page-section">
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">18</div>
+                    <div class="kpi-label">طلبات صيانة نشطة</div>
+                    <div class="kpi-trend negative">
+                        <i class="fas fa-clock"></i>
+                        <span>6 طلبات عاجلة</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background: linear-gradient(135deg, #4AA6C5 0%, #3A8AA8 100%);">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">142</div>
+                    <div class="kpi-label">طلبات مكتملة هذا الشهر</div>
+                    <div class="kpi-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+18% عن الشهر الماضي</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background: linear-gradient(135deg, #C5A47E 0%, #B08D5F 100%);">
+                            <i class="fas fa-stopwatch"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">4.2 ساعة</div>
+                    <div class="kpi-label">متوسط وقت الاستجابة</div>
+                    <div class="kpi-trend">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>تحسن بنسبة 15%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <div class="activity-header">
+                    <div class="activity-title">
+                        <i class="fas fa-wrench"></i> طلبات الصيانة النشطة
+                    </div>
+                    <button class="view-all-btn" onclick="openNewTicketModal()">+ إنشاء تذكرة جديدة</button>
+                </div>
+
+                <table class="maintenance-table">
+                    <thead>
+                        <tr>
+                            <th>رقم التذكرة</th>
+                            <th>الموقع</th>
+                            <th>المشكلة</th>
+                            <th>الأولوية</th>
+                            <th>الحالة</th>
+                            <th>الإجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>#MT-2641</strong></td>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon"></span>
+                                    إيوان سدرة - فيلا 104
+                                </span>
+                            </td>
+                            <td>تسرب مياه في الحمام الرئيسي</td>
+                            <td><span class="priority-high">عاجل</span></td>
+                            <td><span class="badge urgent">قيد المعالجة</span></td>
+                            <td><button class="action-btn" onclick="alert('تم فتح التفاصيل')">عرض</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#MT-2640</strong></td>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon" style="background: #4AA6C5;"></span>
+                                    رتال رايز - شقة 2301
+                                </span>
+                            </td>
+                            <td>صيانة دورية لمكيف الهواء</td>
+                            <td><span class="priority-medium">متوسطة</span></td>
+                            <td><span class="badge pending">مجدولة</span></td>
+                            <td><button class="action-btn" onclick="alert('تم فتح التفاصيل')">عرض</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#MT-2639</strong></td>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon" style="background: #C5A47E;"></span>
+                                    نساج تاون - تاون هاوس 15
+                                </span>
+                            </td>
+                            <td>استبدال مصابيح الإنارة</td>
+                            <td><span class="priority-low">منخفضة</span></td>
+                            <td><span class="badge completed">مكتمل</span></td>
+                            <td><button class="action-btn" onclick="alert('تم فتح التفاصيل')">عرض</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#MT-2638</strong></td>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon"></span>
+                                    إيوان سدرة - فيلا 87
+                                </span>
+                            </td>
+                            <td>إصلاح باب المرآب</td>
+                            <td><span class="priority-medium">متوسطة</span></td>
+                            <td><span class="badge pending">قيد المعالجة</span></td>
+                            <td><button class="action-btn" onclick="alert('تم فتح التفاصيل')">عرض</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#MT-2637</strong></td>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon" style="background: #4AA6C5;"></span>
+                                    رتال رايز - شقة 1804
+                                </span>
+                            </td>
+                            <td>تنظيف نظام التهوية</td>
+                            <td><span class="priority-low">منخفضة</span></td>
+                            <td><span class="badge pending">مجدولة</span></td>
+                            <td><button class="action-btn" onclick="alert('تم فتح التفاصيل')">عرض</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End Maintenance Section -->
+
+        <!-- Reports Section -->
+        <div id="reports" class="page-section">
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">850 مليون ريال</div>
+                    <div class="kpi-label">إجمالي الإيرادات السنوية</div>
+                    <div class="kpi-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+8.5% عن العام الماضي</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background: linear-gradient(135deg, #4AA6C5 0%, #3A8AA8 100%);">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">380 مليون ريال</div>
+                    <div class="kpi-label">إجمالي المصروفات التشغيلية</div>
+                    <div class="kpi-trend negative">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+3.2% عن العام الماضي</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background: linear-gradient(135deg, #C5A47E 0%, #B08D5F 100%);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">470 مليون ريال</div>
+                    <div class="kpi-label">صافي الربح</div>
+                    <div class="kpi-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+12.3% عن العام الماضي</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-grid">
+                <div class="report-card">
+                    <div class="chart-title">
+                        <i class="fas fa-chart-pie"></i>
+                        توزيع الإيرادات حسب المشروع
+                    </div>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+
+                <div class="report-card">
+                    <div class="chart-title">
+                        <i class="fas fa-chart-area"></i>
+                        نمو الإيرادات الشهرية
+                    </div>
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <div class="activity-header">
+                    <div class="activity-title">
+                        <i class="fas fa-table"></i> التقرير المالي التفصيلي
+                    </div>
+                    <button class="view-all-btn">تصدير PDF</button>
+                </div>
+
+                <table class="financial-table">
+                    <thead>
+                        <tr>
+                            <th>المشروع</th>
+                            <th>الإيرادات (ريال)</th>
+                            <th>المصروفات (ريال)</th>
+                            <th>صافي الربح (ريال)</th>
+                            <th>هامش الربح %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon"></span>
+                                    إيوان سدرة
+                                </span>
+                            </td>
+                            <td>380,000,000</td>
+                            <td>165,000,000</td>
+                            <td class="amount-positive">215,000,000</td>
+                            <td class="amount-positive">56.6%</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon" style="background: #4AA6C5;"></span>
+                                    رتال رايز
+                                </span>
+                            </td>
+                            <td>295,000,000</td>
+                            <td>125,000,000</td>
+                            <td class="amount-positive">170,000,000</td>
+                            <td class="amount-positive">57.6%</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="project-label">
+                                    <span class="project-icon" style="background: #C5A47E;"></span>
+                                    نساج تاون
+                                </span>
+                            </td>
+                            <td>175,000,000</td>
+                            <td>90,000,000</td>
+                            <td class="amount-positive">85,000,000</td>
+                            <td class="amount-positive">48.6%</td>
+                        </tr>
+                        <tr style="background: #F0F7F5; font-weight: 700;">
+                            <td><strong>الإجمالي</strong></td>
+                            <td><strong>850,000,000</strong></td>
+                            <td><strong>380,000,000</strong></td>
+                            <td class="amount-positive"><strong>470,000,000</strong></td>
+                            <td class="amount-positive"><strong>55.3%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End Reports Section -->
+
+        <!-- Projects Section (Placeholder) -->
+        <div id="projects" class="page-section">
+            <div class="activity-card" style="text-align: center; padding: 60px;">
+                <i class="fas fa-building" style="font-size: 60px; color: var(--retal-accent); margin-bottom: 20px;"></i>
+                <h2 style="color: var(--retal-dark); margin-bottom: 10px;">قسم المشاريع</h2>
+                <p style="color: #888;">هذا القسم قيد التطوير - سيتم عرض تفاصيل مشاريع إيوان ورتال رايز ونساج تاون</p>
+            </div>
+        </div>
+
+        <!-- Community Section (Placeholder) -->
+        <div id="community" class="page-section">
+            <div class="activity-card" style="text-align: center; padding: 60px;">
+                <i class="fas fa-users" style="font-size: 60px; color: var(--retal-accent); margin-bottom: 20px;"></i>
+                <h2 style="color: var(--retal-dark); margin-bottom: 10px;">تجربة المجتمع</h2>
+                <p style="color: #888;">هذا القسم قيد التطوير - سيتم عرض تقييمات المستأجرين وملاحظاتهم</p>
+            </div>
+        </div>
+
+        </div>
+        <!-- End Content Container -->
+
+        <!-- New Ticket Modal -->
+        <div id="newTicketModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">إنشاء تذكرة صيانة جديدة</h2>
+                    <button class="close-btn" onclick="closeNewTicketModal()">×</button>
+                </div>
+                <form onsubmit="submitTicket(event)">
+                    <div class="form-group">
+                        <label>المشروع</label>
+                        <select required>
+                            <option value="">اختر المشروع</option>
+                            <option value="ewan">إيوان سدرة</option>
+                            <option value="rise">رتال رايز</option>
+                            <option value="nesaj">نساج تاون</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الوحدة</label>
+                        <input type="text" placeholder="مثال: فيلا 104" required>
+                    </div>
+                    <div class="form-group">
+                        <label>نوع المشكلة</label>
+                        <select required>
+                            <option value="">اختر نوع المشكلة</option>
+                            <option value="plumbing">سباكة</option>
+                            <option value="electrical">كهرباء</option>
+                            <option value="ac">تكييف</option>
+                            <option value="general">صيانة عامة</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>الأولوية</label>
+                        <select required>
+                            <option value="">اختر الأولوية</option>
+                            <option value="high">عاجلة</option>
+                            <option value="medium">متوسطة</option>
+                            <option value="low">منخفضة</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>وصف المشكلة</label>
+                        <textarea placeholder="اكتب تفاصيل المشكلة هنا..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">إنشاء التذكرة</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Navigation Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.page-section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Hide all sections
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    // Show selected section
+                    const page = this.getAttribute('data-page');
+                    const targetSection = document.getElementById(page);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        
+                        // Update page title
+                        const pageTitle = document.querySelector('.page-title h1');
+                        const pageTitles = {
+                            'dashboard': 'نظرة عامة على الأصول',
+                            'maintenance': 'الصيانة والتشغيل',
+                            'reports': 'التقارير المالية',
+                            'projects': 'مشاريعنا',
+                            'community': 'تجربة المجتمع'
+                        };
+                        pageTitle.textContent = pageTitles[page] || 'رتال';
+                    }
+                });
+            });
+        });
+
+        // Modal Functions
+        function openNewTicketModal() {
+            document.getElementById('newTicketModal').classList.add('show');
+        }
+
+        function closeNewTicketModal() {
+            document.getElementById('newTicketModal').classList.remove('show');
+        }
+
+        function submitTicket(e) {
+            e.preventDefault();
+            alert('تم إنشاء التذكرة بنجاح! رقم التذكرة: #MT-' + Math.floor(Math.random() * 9000 + 1000));
+            closeNewTicketModal();
+            e.target.reset();
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('newTicketModal');
+            if (event.target == modal) {
+                closeNewTicketModal();
+            }
+        }
+
+        // Chart.js Configuration
+        Chart.defaults.font.family = 'Tajawal';
+        
+        // Collection Rate Chart (Bar)
+        const collectionCtx = document.getElementById('collectionChart').getContext('2d');
+        new Chart(collectionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['الرياض', 'الخبر', 'جدة'],
+                datasets: [{
+                    label: 'معدل التحصيل %',
+                    data: [92, 88, 95],
+                    backgroundColor: [
+                        'rgba(182, 227, 212, 0.8)',
+                        'rgba(74, 166, 197, 0.8)',
+                        'rgba(197, 164, 126, 0.8)'
+                    ],
+                    borderColor: [
+                        '#B6E3D4',
+                        '#4AA6C5',
+                        '#C5A47E'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        grid: {
+                            color: '#f0f0f0'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Satisfaction Trend Chart (Line)
+        const satisfactionCtx = document.getElementById('satisfactionChart').getContext('2d');
+        new Chart(satisfactionCtx, {
+            type: 'line',
+            data: {
+                labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+                datasets: [{
+                    label: 'درجة الرضا',
+                    data: [78, 82, 85, 88, 90, 92],
+                    borderColor: '#4AA6C5',
+                    backgroundColor: 'rgba(74, 166, 197, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#4AA6C5',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        grid: {
+                            color: '#f0f0f0'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Revenue Distribution Chart (Pie)
+        const revenueCtx = document.getElementById('revenueChart');
+        if (revenueCtx) {
+            new Chart(revenueCtx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['إيوان سدرة', 'رتال رايز', 'نساج تاون'],
+                    datasets: [{
+                        data: [380, 295, 175],
+                        backgroundColor: [
+                            'rgba(182, 227, 212, 0.8)',
+                            'rgba(74, 166, 197, 0.8)',
+                            'rgba(197, 164, 126, 0.8)'
+                        ],
+                        borderColor: [
+                            '#B6E3D4',
+                            '#4AA6C5',
+                            '#C5A47E'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: {
+                                    size: 13
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + ' مليون ريال';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Revenue Growth Chart (Area)
+        const growthCtx = document.getElementById('growthChart');
+        if (growthCtx) {
+            new Chart(growthCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+                    datasets: [
+                        {
+                            label: 'إيوان سدرة',
+                            data: [62, 65, 63, 64, 66, 68],
+                            borderColor: '#B6E3D4',
+                            backgroundColor: 'rgba(182, 227, 212, 0.2)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'رتال رايز',
+                            data: [48, 49, 50, 49, 51, 52],
+                            borderColor: '#4AA6C5',
+                            backgroundColor: 'rgba(74, 166, 197, 0.2)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'نساج تاون',
+                            data: [28, 29, 30, 29, 30, 31],
+                            borderColor: '#C5A47E',
+                            backgroundColor: 'rgba(197, 164, 126, 0.2)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + ' مليون ريال';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + 'م';
+                                }
+                            },
+                            grid: {
+                                color: '#f0f0f0'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
